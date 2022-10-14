@@ -1,0 +1,10 @@
+export const STATUS_CODE = Object.freeze({
+    SERVER_ERROR:500,
+    CREATED:201,
+    UNPROCESSABLE_ENTITY:422,
+    CONFLICT:409,
+    UNAUTHORIZED:401,
+    OK:200,
+    NOT_FOUND: 404,
+    NO_CONTENT:204
+})
