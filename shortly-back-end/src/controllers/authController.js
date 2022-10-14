@@ -15,7 +15,7 @@ try {
     await connection.query('INSERT INTO users (name,email,password) VALUES ($1,$2,$3)',[name,email,passwordHash]);
     return res.sendStatus(STATUS_CODE.CREATED);
 } catch (error) {
-    console.log(error)
+    console.log(error);
     res.sendStatus(STATUS_CODE.SERVER_ERROR);
 }
 }
