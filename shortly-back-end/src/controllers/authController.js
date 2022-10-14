@@ -10,7 +10,7 @@ export async function createUser(req,res){
 try {
     const user = await connection.query('SELECT * FROM users WHERE email = $1',[email]);
     if(user.rowCount === 1){
-        return res.sendStatus(STATUS_CODE.CONFLICT)
+        return res.sendStatus(STATUS_CODE.CONFLICT);
     }   
     await connection.query('INSERT INTO users (name,email,password) VALUES ($1,$2,$3)',[name,email,passwordHash]);
     return res.sendStatus(STATUS_CODE.CREATED);
