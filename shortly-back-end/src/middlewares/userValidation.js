@@ -7,9 +7,8 @@ export async function validateCreateUser(req,res,next){
     const joiValidation = userSignUpSchema.validate(newUser,{abortEarly: false})
 
     if(joiValidation.error){
-     //  const errorMessage = joiValidation.error.details.map(detail => detail.message);
-       return res.sendStatus(STATUS_CODE.UNPROCESSABLE_ENTITY);
-
+       const errorMessage = joiValidation.error.details.map(detail => detail.message);
+       return res.status(STATUS_CODE.UNPROCESSABLE_ENTITY).send(errorMessage);
     }
     next();
 }

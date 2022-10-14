@@ -23,8 +23,9 @@ export async function validateToken(req,res,next){
     } catch (error) {
         console.log(error);
         res.sendStatus(STATUS_CODE.SERVER_ERROR);
+        return;
     }
     res.locals.token = userToken;
     res.locals.userId = id;
-     next();
+    next();
 }

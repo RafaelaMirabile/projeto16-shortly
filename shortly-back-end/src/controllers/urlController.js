@@ -55,11 +55,12 @@ export async function redirectToUrl(req,res){
         const newCount = count + 1;
         await connection.query('UPDATE urls SET "visitCount"= $1 WHERE "shortenUrl"= $2',[newCount,shortUrl])
 
-        res.redirect(STATUS_CODE.OK, link);
+       return res.redirect(STATUS_CODE.OK, link);
 
     } catch (error) {
         console.log(error);
         res.sendStatus(STATUS_CODE.SERVER_ERROR);
+        return;
     }
 }
 
@@ -80,6 +81,7 @@ export async function deleteUrl(req,res){
 
     } catch (error) {
         console.log(error);
-        res.sendStatus(STATUS_CODE.SERVER_ERROR)       
+        res.sendStatus(STATUS_CODE.SERVER_ERROR);
+        return       
     }
 }

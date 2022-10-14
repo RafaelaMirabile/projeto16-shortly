@@ -27,6 +27,7 @@ export async function getUserUrls(req,res){
     } catch (error) {
         console.log(error);
         res.sendStatus(STATUS_CODE.SERVER_ERROR);
+        return
     }
 }
 

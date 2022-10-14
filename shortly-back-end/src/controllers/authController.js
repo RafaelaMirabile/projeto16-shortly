@@ -24,7 +24,6 @@ try {
 export async function login(req,res){
     const {email,password}= req.body;
 
-
     try {
         const user = await connection.query(`SELECT * FROM users WHERE email= $1`,[email]);
         const userPassword = user.rows.map(value => value.password).toString();
@@ -40,6 +39,7 @@ export async function login(req,res){
       
     } catch (error) {
         console.log(error);
-        res.sendStatus(STATUS_CODE.SERVER_ERROR)
+        res.sendStatus(STATUS_CODE.SERVER_ERROR);
+        return
     }
 }
