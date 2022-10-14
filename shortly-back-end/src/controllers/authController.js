@@ -3,7 +3,6 @@ import connection from "../database/database.js";
 import bcrypt from 'bcrypt'
 import {v4 as uuid} from 'uuid'
 
-
 export async function createUser(req,res){
     const {name,email,password} = req.body;
     const passwordHash = bcrypt.hashSync(password,6);
@@ -30,7 +29,7 @@ export async function login(req,res){
         const validPassword = bcrypt.compareSync(password,userPassword);
 
         if(!validPassword  || user.rowCount === 0){
-            return res.status(STATUS_CODE.UNAUTHORIZED).send({message : "Erro: email e/ou senha inválido(s)." });
+            return res.status(STATUS_CODE.UNAUTHORIZED).send({message : "Erro: email e/ou senha inválido(s)."});
         }      
         const token = uuid();
         await connection.query('INSERT INTO sessions("userId",token) VALUES($1,$2)',[user.rows[0].id, token]);
