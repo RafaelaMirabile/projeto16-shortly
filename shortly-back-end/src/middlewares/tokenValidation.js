@@ -11,7 +11,7 @@ export async function validateToken(req,res,next){
         return res.status(STATUS_CODE.UNAUTHORIZED).send('Acess denied');
     }
     try {
-       const session = await connection.query(`SELECT * FROM sessions WHERE token = $1`,[token]);
+       const session = await connection.query(`SELECT * FROM sessions WHERE token = $1`,[token])
      
         if(session.rowCount === 0){
             return res.status(STATUS_CODE.UNAUTHORIZED).send('Acess denied');
