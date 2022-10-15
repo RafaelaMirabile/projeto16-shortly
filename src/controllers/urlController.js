@@ -1,11 +1,12 @@
 import { STATUS_CODE } from "../enums/StatusCode.js";
-import {nanoid} from 'nanoid'
+import { nanoid} from 'nanoid'
 import connection from "../database/database.js";
 
 export async function createUrl(req,res){
     const {url} = req.body;
     const user = res.locals.userId;
-    const shortUrl = nanoid(10);
+    const shortUrl = nanoid(8);
+
     
     try {
         await connection.query(`INSERT INTO urls ("userId",url,"shortenUrl") VALUES ($1,$2,$3)`,[user,url,shortUrl]);
@@ -41,19 +42,21 @@ export async function getUrlById(req,res){
 }
 
 export async function redirectToUrl(req,res){
-    const {shortUrl} = req.params
+    const {shortUrl} = req.params;
 
     try {
-        const url = await connection.query(`SELECT url,"visitCount" FROM urls WHERE "shortenUrl"=$1`,[shortUrl]);
+
+        const url = await connection.query(`SELECT url,"visitCount" FROM urls WHERE "shortenUrl" = $1`,[shortUrl]);
+        
         if(url.rowCount === 0){
             return res.sendStatus(STATUS_CODE.NOT_FOUND);
         }
 
-        const link = url.rows[0].url;
-       
+        const link = url.rows[0].url;      
         const count = url.rows[0].visitCount;
+
         const newCount = count + 1;
-        await connection.query('UPDATE urls SET "visitCount"= $1 WHERE "shortenUrl"= $2',[newCount,shortUrl])
+        await connection.query('UPDATE urls SET "visitCount"=$1 WHERE "shortenUrl"= $2',[newCount,shortUrl])
 
        return res.redirect(STATUS_CODE.OK, link);
 
@@ -69,14 +72,13 @@ export async function deleteUrl(req,res){
     const url = req.params.id;
 
     try {
-        const urls = await connection.query('SELECT "shortenUrl" FROM urls WHERE "userId"=$1',[user]);
-        const searchUrl = urls.rows.filter(value => value.shortenUrl === url);
+        const urls = await connection.query('SELECT * FROM urls WHERE "userId"=$1',[user]);
 
-        if(searchUrl.length === 0){
-            return res.status(STATUS_CODE.UNAUTHORIZED).send('Cannot found specified link');
+        if(urls.rowCount=== 0){
+            return res.sendStatus(STATUS_CODE.UNAUTHORIZED);
         }
-
-        await connection.query('DELETE FROM urls WHERE "shortenUrl"=$1',[searchUrl[0].shortenUrl]);
+        
+        await connection.query('DELETE FROM urls WHERE id =$1',[url]);
         return res.sendStatus(STATUS_CODE.NO_CONTENT);
 
     } catch (error) {
