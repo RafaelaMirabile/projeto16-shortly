@@ -47,7 +47,6 @@ export async function redirectToUrl(req,res){
     try {
 
         const url = await connection.query(`SELECT url,"visitCount" FROM urls WHERE "shortenUrl" = $1`,[shortUrl]);
-        
         if(url.rowCount === 0){
             return res.sendStatus(STATUS_CODE.NOT_FOUND);
         }
