@@ -2,8 +2,10 @@ import connection from "../database/database.js";
 import { STATUS_CODE } from "../enums/StatusCode.js";
 
 export async function validateToken(req,res,next){
-    const {authorization} = req.headers;
-    const token = authorization?.replace('Bearer', '');
+    
+    let token = req.headers?.authorization;
+    token = token.replace('Bearer ', '');
+
     let userToken;
     let id;
       
